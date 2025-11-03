@@ -1,27 +1,28 @@
-name: long-strategy-bot-1d
+name: long-1d-bot
 
 on:
   schedule:
-    - cron: "0 9 * * *"   # her gün 09:00 UTC
+    - cron: "0 9 * * *"   # Her gün 09:00 UTC (Türkiye saatiyle 12:00)
   workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install deps
+
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run 1D Bot
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: |
-          python strategy_scan.py
+        run: python strategy_scan.py
